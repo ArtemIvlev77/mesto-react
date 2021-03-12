@@ -1,36 +1,15 @@
-import logo from '../../image/logo.svg';
-import logoSwitch from '../../image/pencil.svg';
+import Header from '../Header/Header';
+import Main from '../Main/Main.js';
+import Footer from '../Footer/Footer.js';
 
 function App() {
   return (
     <div className="App">
      <div className="page">
     <div className="page__container">
-      <header className="header page__section" >
-        <img src={logo} alt="логотип: место россия" className="header__logo"/>
-        </header>
-      <main className="content">
-        <section className="profile page__section">
-          <div className="profile__avatar-container">
-            <img src={logoSwitch} className="profile__editAvatar" alt="Смена аватара"/>
-            <img src='#' alt="Аватар" className="profile__avatar"/>
-          </div>
-          <div className="profile__info">
-            <div className="profile__container">
-              <h1 className="profile__name">Жак Ив Кусто </h1> <button type="button" className="profile__edit-btn"></button>
-            </div>
-            <p className="profile__job">Исследователь океана </p>
-          </div>
-          <button type="button" className="profile__add-btn"></button>
-        </section>
-        <section className="page__section">
-          <ul className="elements">
-          </ul>
-        </section>
-      </main>
-      <footer className="footer page__section">
-        <p className="footer__copyright"> &copy; 2020 Ивлев Артём</p>
-      </footer>
+      <Header/>
+      <Main/>
+      <Footer/>
       <div className="popup profileEditor">
         <div className="popup__container">
           <button type="button" className="popup__closeBtn profileEditor-closeBtn"></button>
