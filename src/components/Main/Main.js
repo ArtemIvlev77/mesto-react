@@ -2,7 +2,21 @@ import React from 'react';
 import logoSwitch from '../../image/pencil.svg';
 
 
+
 function Main() {
+  function handleAvatarClick() {
+
+  document.querySelector('.popupEditAvatar').classList.add('popup_is-opened');
+  }
+  function handleEditProfileClick() {
+    document.querySelector('.profileEditor').classList.add('popup_is-opened');
+
+  }
+  function handleAddPlaceClick() {
+    document.querySelector('.newElement').classList.add('popup_is-opened');
+
+  }
+
   return(
     <main className="content">
         <section className="profile page__section">
