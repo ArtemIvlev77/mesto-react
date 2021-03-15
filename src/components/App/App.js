@@ -48,15 +48,10 @@ function App() {
                 onAddPlace={handleAddPlaceClick}
                 onEditAvatar={handleEditAvatarClick}
                 onCardClick={handleCardClick}
-                userName
-                userDescription
-                userAvatar
             />
             <Footer/>
             <PopupWithForm type="profileEditor" title="Редактировать профиль" isOpen={isEditProfilePopupOpen}
-                           onClose={closeAllPopups}
-            >
-              <form className="popup__form profileEditor-form" noValidate>
+                           onClose={closeAllPopups}>
                 <input name="name" id="profile-name" type="text"
                        className="popup__text popup__text_valid popup__name-input"
                        required minLength="2" maxLength="40"/>
@@ -66,11 +61,9 @@ function App() {
                        required minLength="2" maxLength="200"/>
                 <span id="profile-job-error" className="popup__error"/>
                 <button type="submit" className="popup__save-btn profileEditor-saveBtn">Сохранить</button>
-              </form>
             </PopupWithForm>
 
             <PopupWithForm type="newElement" title="Новое место" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}>
-              <form className="popup__form newElement-form" noValidate>
                 <input name="name" id="new-element-name" type="text"
                        className="popup__text popup__text_valid popup__element-title" placeholder="Название" required
                        minLength="2"
@@ -81,23 +74,17 @@ function App() {
                        placeholder="Ссылка на картинку" required/>
                 <span id="url-element-error" className="popup__error"/>
                 <button type="submit" className="popup__save-btn newElement-saveBtn">Сохранить</button>
-              </form>
             </PopupWithForm>
-
             <PopupWithForm type="popupSubmit" title="Вы уверены?" onClose={closeAllPopups}>
-              <form name="delete-confirm" className="popup__form" noValidate>
                 <input name="save-button" type="submit" value="Да" className="popup__save-btn"/>
-              </form>
             </PopupWithForm>
             <PopupWithForm type="popupEditAvatar" title="Обновить аватар" isOpen={isEditAvatarPopupOpen}
                            onClose={closeAllPopups}>
-              <form name="editAvatar" className="popup__form" noValidate>
                 <input name="avatar" id="URL" type="url" className="popup__text popup__text_valid popupAvatarUrl"
                        placeholder="Ссылка на аватар"
                        required/>
                 <span id="URL-error" className="popup__error"/>
                 <button type="submit" className="popup__save-btn editAvatar-saveBtn">Сохранить</button>
-              </form>
             </PopupWithForm>
             <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
           </div>
