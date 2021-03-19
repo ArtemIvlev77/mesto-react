@@ -1,12 +1,29 @@
-import React, {useState} from 'react';
-import Header from '../Header/Header';
-import Main from '../Main/Main.js';
+import React, {useEffect, useState } from 'react';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import Footer from '../Footer/Footer.js';
-import PopupWithForm from "../PopupWithForm/PopupWithForm.js";
+import Header from '../Header/Header';
 import ImagePopup from "../ImagePopup/ImagePopup.js";
+import Main from '../Main/Main.js';
+import PopupWithForm from "../PopupWithForm/PopupWithForm.js";
+import api from '../../utils/api.js';
 
 
 function App() {
+  const [currentUser, setCurrentUser] = useState({});
+
+
+  useEffect(() => { 
+    
+    api.getUserInfo()
+        .then((data) => {
+              setCurrentUser(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }, [])
+
+
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -39,6 +56,7 @@ function App() {
   }
 
   return (
+  <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <div className="page">
           <div className="page__container">
@@ -90,6 +108,7 @@ function App() {
           </div>
         </div>
       </div>
+      </CurrentUserContext.Provider>
   );
 }
 
