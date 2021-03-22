@@ -1,8 +1,5 @@
 class Api {
-  constructor({
-                baseUrl,
-                headers
-              }) {
+  constructor({ baseUrl, headers }) {
     this._url = baseUrl;
     this._headers = headers;
   }
@@ -43,32 +40,29 @@ class Api {
     }).then((res) => this._addResult(res));
   }
 
-  addCard(
-      name,
-      link
-  ) {
+  addCard(name, link) {
     return fetch(`${this._url}/cards`, {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify({
         name,
-        link
+        link,
       }),
     }).then((res) => this._addResult(res));
   }
 
-  setLikes(cardId) {
-    return fetch(`${this._url}/cards/likes/${cardId}`, {
-      method: "PUT",
-      headers: this._headers,
-    }).then((res) => this._addResult(res));
-  }
-
-  delLikes(cardId) {
-    return fetch(`${this._url}/cards/likes/${cardId}`, {
-      method: "DELETE",
-      headers: this._headers,
-    }).then((res) => this._addResult(res));
+  toggleLikeCardStatus(cardId, isLiked) {
+    if (isLiked) {
+      return fetch(`${this._url}/cards/likes/${cardId}`, {
+        method: "PUT",
+        headers: this._headers,
+      }).then((res) => this._addResult(res));
+    } else {
+      return fetch(`${this._url}/cards/likes/${cardId}`, {
+        method: "DELETE",
+        headers: this._headers,
+      }).then((res) => this._addResult(res));
+    }
   }
 
   deleteCard(cardId) {
@@ -86,12 +80,12 @@ class Api {
   }
 }
 
-  const api = new Api({
-    baseUrl: "https://mesto.nomoreparties.co/v1/cohort-20",
-    headers: {
-      authorization: "c991fcc7-9f95-4717-b779-f2f9eb8f4dbe",
-      "Content-Type": "application/json",
-    },
-  });
+const api = new Api({
+  baseUrl: "https://mesto.nomoreparties.co/v1/cohort-20",
+  headers: {
+    authorization: "c991fcc7-9f95-4717-b779-f2f9eb8f4dbe",
+    "Content-Type": "application/json",
+  },
+});
 
 export default api;

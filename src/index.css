@@ -30,6 +30,8 @@
 @import url(./blocks/element/__like-btn/_active/element__like-btn_active.css);
 @import url(./blocks/element/__like-count/element__like-count.css);
 @import url(./blocks/element/__remove-btn/element__remove-btn.css);
+@import url(./blocks/element/__remove-btn/_visibile/element__remove-btn_visible.css);
+@import url(./blocks/element/__remove-btn/_hidden/element__remove-btn_hidden.css);
 @import url(./blocks/element/__image-btn/element__image-btn.css);
 /*            --footer--          */
 @import url(./blocks/footer/footer.css);
