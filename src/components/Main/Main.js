@@ -1,5 +1,5 @@
 import avatarSwitch from "../../image/pencil.svg";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 const Main = (props) => {
@@ -39,9 +39,8 @@ const Main = (props) => {
         />
       </section>
       <section className="page__section">
-        <ul className="elements"></ul>
+        <ul className="elements">{props.cards}</ul>
       </section>
-      <section className="elements">{props.cards}</section>
     </main>
   );
 };

@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
-import Footer from "../Footer/Footer.js";
+import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
-import ImagePopup from "../ImagePopup/ImagePopup.js";
-import Main from "../Main/Main.js";
+import ImagePopup from "../ImagePopup/ImagePopup";
+import Main from "../Main/Main";
 import PopupWithForm from "../PopupWithForm/PopupWithForm.js";
-import api from "../../utils/api.js";
+import api from "../../utils/api";
 import EditProfilePopup from "../EditProfilePopup/EditProfilePopup";
 import EditAvatarPopup from "../EditAvatarPopup/EditAvatarPopup";
-import Card from "../Card/Card.js";
+import Card from "../Card/Card";
 import AddNewElementPopup from "../AddNewElementPopup/AddNewElementPopup";
 
 function App() {
@@ -35,6 +35,25 @@ function App() {
     confirm: "Да",
   });
 
+  function handleEditAvatarClick() {
+    setIsEditAvatarPopupOpen(true);
+  }
+
+  function handleEditProfileClick() {
+    setIsEditProfilePopupOpen(true);
+  }
+
+  function handleAddPlaceClick() {
+    setAddNewElementPopupOpen(true);
+  }
+
+  function closeAllPopups() {
+    setAddNewElementPopupOpen(false);
+    setIsEditProfilePopupOpen(false);
+    setIsEditAvatarPopupOpen(false);
+    setSelectedCard(false);
+  }
+
   function handleCardClick(card) {
     setSelectedCard({
       name: card.name,
@@ -56,47 +75,6 @@ function App() {
     });
   };
 
-  function closeAllPopups() {
-    setAddNewElementPopupOpen(false);
-    setIsEditProfilePopupOpen(false);
-    setIsEditAvatarPopupOpen(false);
-    setSelectedCard(false);
-  }
-
-  useEffect(() => {
-    const handleCloseOnEsc = (event) => {
-      if (event.key === "Escape") {
-        closeAllPopups();
-      }
-    };
-    const handleCloseOnOverlay = (event) => {
-      const popupIsOpened = document.querySelector(".popup_is-opened");
-      if (event.target === popupIsOpened) {
-        closeAllPopups();
-      }
-    };
-
-    document.addEventListener("keydown", handleCloseOnEsc);
-    document.addEventListener("mousedown", handleCloseOnOverlay);
-
-    return () => {
-      document.removeEventListener("keydown", handleCloseOnEsc);
-      document.removeEventListener("mousedown", handleCloseOnOverlay);
-    };
-  }, []);
-
-  function handleEditAvatarClick() {
-    setIsEditAvatarPopupOpen(true);
-  }
-
-  function handleEditProfileClick() {
-    setIsEditProfilePopupOpen(true);
-  }
-
-  function handleAddPlaceClick() {
-    setAddNewElementPopupOpen(true);
-  }
-
   useEffect(() => {
     api
       .getInitialCards()
@@ -107,6 +85,28 @@ function App() {
         console.log(err);
       });
   }, []);
+
+  function handleAddNewElementSubmit({ name, link }) {
+    setValue({ ...value, submit: "Сохраняю данные..." });
+    api
+      .addNewElement(name, link)
+      .then((newCard) => setCards([newCard, ...cards]))
+      .catch((err) => console.log(err))
+      .then(() => {
+        closeAllPopups();
+        setValue({ ...value, submit: "Сохранить" });
+      });
+  }
+
+  const cardList = cards.map((cards) => (
+    <Card
+      key={cards._id}
+      card={cards}
+      onCardClick={handleCardClick}
+      onCardLike={handleCardLike}
+      onCardDelete={handleCardDelete}
+    />
+  ));
 
   function handleUpdateUser({ name, about }) {
     setValue({ ...value, submit: "Сохраняю данные..." });
@@ -132,27 +132,27 @@ function App() {
       });
   }
 
-  function handleAddNewElementSubmit({ name, link }) {
-    setValue({ ...value, submit: "Сохраняю данные..." });
-    api
-      .addNewElement(name, link)
-      .then((newCard) => setCards([newCard, ...cards]))
-      .catch((err) => console.log(err))
-      .then(() => {
+  useEffect(() => {
+    const handleCloseOnEsc = (event) => {
+      if (event.key === "Escape") {
         closeAllPopups();
-        setValue({ ...value, submit: "Сохранить" });
-      });
-  }
+      }
+    };
+    const handleCloseOnOverlay = (event) => {
+      const popupIsOpened = document.querySelector(".popup_is-opened");
+      if (event.target === popupIsOpened) {
+        closeAllPopups();
+      }
+    };
 
-  const cardList = cards.map((cards) => (
-    <Card
-      key={cards._id}
-      card={cards}
-      onCardClick={handleCardClick}
-      onCardLike={handleCardLike}
-      onCardDelete={handleCardDelete}
-    />
-  ));
+    document.addEventListener("keydown", handleCloseOnEsc);
+    document.addEventListener("mousedown", handleCloseOnOverlay);
+
+    return () => {
+      document.removeEventListener("keydown", handleCloseOnEsc);
+      document.removeEventListener("mousedown", handleCloseOnOverlay);
+    };
+  }, []);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
