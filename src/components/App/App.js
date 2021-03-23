@@ -9,6 +9,7 @@ import api from "../../utils/api.js";
 import EditProfilePopup from "../EditProfilePopup/EditProfilePopup";
 import EditAvatarPopup from "../EditAvatarPopup/EditAvatarPopup";
 import Card from "../Card/Card.js";
+import AddNewElementPopup from "../AddNewElementPopup/AddNewElementPopup";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
@@ -26,7 +27,7 @@ function App() {
 
   const [cards, setCards] = useState([]);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isAddNewElementPopupOpen, setAddNewElementPopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(false);
   const [value, setValue] = useState({
@@ -56,7 +57,7 @@ function App() {
   };
 
   function closeAllPopups() {
-    setIsAddPlacePopupOpen(false);
+    setAddNewElementPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setSelectedCard(false);
@@ -93,7 +94,7 @@ function App() {
   }
 
   function handleAddPlaceClick() {
-    setIsAddPlacePopupOpen(true);
+    setAddNewElementPopupOpen(true);
   }
 
   useEffect(() => {
@@ -106,16 +107,6 @@ function App() {
         console.log(err);
       });
   }, []);
-
-  const cardList = cards.map((cards) => (
-    <Card
-      key={cards._id}
-      card={cards}
-      onCardClick={handleCardClick}
-      onCardLike={handleCardLike}
-      onCardDelete={handleCardDelete}
-    />
-  ));
 
   function handleUpdateUser({ name, about }) {
     setValue({ ...value, submit: "Сохраняю данные..." });
@@ -141,6 +132,28 @@ function App() {
       });
   }
 
+  function handleAddNewElementSubmit({ name, link }) {
+    setValue({ ...value, submit: "Сохраняю данные..." });
+    api
+      .addNewElement(name, link)
+      .then((newCard) => setCards([newCard, ...cards]))
+      .catch((err) => console.log(err))
+      .then(() => {
+        closeAllPopups();
+        setValue({ ...value, submit: "Сохранить" });
+      });
+  }
+
+  const cardList = cards.map((cards) => (
+    <Card
+      key={cards._id}
+      card={cards}
+      onCardClick={handleCardClick}
+      onCardLike={handleCardLike}
+      onCardDelete={handleCardDelete}
+    />
+  ));
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
@@ -165,39 +178,11 @@ function App() {
               onUpdateUser={handleUpdateUser}
             />
 
-            <PopupWithForm
-              type="newElement"
-              title="Новое место"
-              isOpen={isAddPlacePopupOpen}
+            <AddNewElementPopup
               onClose={closeAllPopups}
-            >
-              <input
-                name="name"
-                id="new-element-name"
-                type="text"
-                className="popup__text popup__text_valid popup__element-title"
-                placeholder="Название"
-                required
-                minLength="2"
-                maxLength="30"
-              />
-              <span id="new-element-name-error" className="popup__error" />
-              <input
-                name="link"
-                id="url-element"
-                type="url"
-                className="popup__text popup__text_valid popup__element-link"
-                placeholder="Ссылка на картинку"
-                required
-              />
-              <span id="url-element-error" className="popup__error" />
-              <button
-                type="submit"
-                className="popup__save-btn newElement-saveBtn"
-              >
-                Сохранить
-              </button>
-            </PopupWithForm>
+              isOpen={isAddNewElementPopupOpen}
+              onAddNewElement={handleAddNewElementSubmit}
+            />
             <PopupWithForm
               type="popupSubmit"
               title="Вы уверены?"

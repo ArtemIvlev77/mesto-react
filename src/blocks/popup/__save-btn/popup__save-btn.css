@@ -1,7 +1,7 @@
 .popup__save-btn {
   width: 100%;
   margin-top: 48px;
-  padding: 14px 125px 17px 125px;
+  padding: 14px 100px 17px 100px;
   background: #000000;
   border-radius: 2px;
   transition: opacity 0.2s linear;

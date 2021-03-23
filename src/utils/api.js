@@ -40,13 +40,13 @@ class Api {
     }).then((res) => this._addResult(res));
   }
 
-  addCard(name, link) {
+  addNewElement(name, link) {
     return fetch(`${this._url}/cards`, {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify({
-        name,
-        link,
+        name: name,
+        link: link,
       }),
     }).then((res) => this._addResult(res));
   }

@@ -41,7 +41,7 @@ const Main = (props) => {
       <section className="page__section">
         <ul className="elements"></ul>
       </section>
-      <section className="elements">{props.cards  }</section>
+      <section className="elements">{props.cards}</section>
     </main>
   );
 };
