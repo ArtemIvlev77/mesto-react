@@ -1,25 +1,40 @@
-import {CurrentUserContext} from '../../contexts/CurrentUserContext.js';
-import PopupWithForm from '../PopupWithForm.js';
+import { useEffect, useRef } from "react";
+import PopupWithForm from "../PopupWithForm//PopupWithForm.js";
 
-<PopupWithForm
-              type="popupEditAvatar"
-              title="Обновить аватар"
-              isOpen={isEditAvatarPopupOpen}
-              onClose={closeAllPopups}
-            >
-              <input
-                name="avatar"
-                id="URL"
-                type="url"
-                className="popup__text popup__text_valid popupAvatarUrl"
-                placeholder="Ссылка на аватар"
-                required
-              />
-              <span id="URL-error" className="popup__error" />
-              <button
-                type="submit"
-                className="popup__save-btn editAvatar-saveBtn"
-              >
-                Сохранить
-              </button>
-            </PopupWithForm>
+function EditAvatarPopup(props) {
+  const refAvatar = useRef();
+  function handleSubmit(event) {
+    event.preventDefault();
+    props.onUpdateAvatar({
+      avatar: refAvatar.current.value,
+    });
+  }
+
+  useEffect(() => {
+    refAvatar.current.value = "";
+  }, [props.isOpen]);
+
+  return (
+    <PopupWithForm
+      type="popupEditAvatar"
+      title="Обновить аватар"
+      isOpen={props.isOpen}
+      onClose={props.onClose}
+      value={props.value}
+      onSubmit={handleSubmit}
+    >
+      <input
+        name="avatar"
+        id="URL"
+        type="url"
+        className="popup__text popup__text_valid popupAvatarUrl"
+        placeholder="Ссылка на аватар"
+        required
+        ref={refAvatar}
+      />
+      <span id="URL-error" className="popup__error" />
+    </PopupWithForm>
+  );
+}
+
+export default EditAvatarPopup;

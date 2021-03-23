@@ -7,6 +7,8 @@ import Main from "../Main/Main.js";
 import PopupWithForm from "../PopupWithForm/PopupWithForm.js";
 import api from "../../utils/api.js";
 import EditProfilePopup from "../EditProfilePopup/EditProfilePopup";
+import EditAvatarPopup from "../EditAvatarPopup/EditAvatarPopup";
+import Card from "../Card/Card.js";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
@@ -22,6 +24,7 @@ function App() {
       });
   }, []);
 
+  const [cards, setCards] = useState([]);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -38,14 +41,26 @@ function App() {
     });
   }
 
+  const handleCardLike = (card) => {
+    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    api.toggleLikeCardStatus(card._id, !isLiked).then((newCard) => {
+      setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
+    });
+  };
+
+  const handleCardDelete = (card) => {
+    const isOwn = card.owner._id === currentUser._id;
+    api.deleteCard(isOwn).then((newCards) => {
+      setCards((state) => state.filter((c) => c._id !== newCards._id));
+    });
+  };
+
   function closeAllPopups() {
     setIsAddPlacePopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setSelectedCard(false);
   }
-
-  //todo
 
   useEffect(() => {
     const handleCloseOnEsc = (event) => {
@@ -81,11 +96,44 @@ function App() {
     setIsAddPlacePopupOpen(true);
   }
 
+  useEffect(() => {
+    api
+      .getInitialCards()
+      .then((cards) => {
+        setCards(cards);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const cardList = cards.map((cards) => (
+    <Card
+      key={cards._id}
+      card={cards}
+      onCardClick={handleCardClick}
+      onCardLike={handleCardLike}
+      onCardDelete={handleCardDelete}
+    />
+  ));
+
   function handleUpdateUser({ name, about }) {
     setValue({ ...value, submit: "Сохраняю данные..." });
     api
       .editUserInfo(name, about)
       .then(() => setCurrentUser({ ...currentUser, name: name, about: about }))
+      .catch((err) => console.log(err))
+      .then(() => {
+        closeAllPopups();
+        setValue({ ...value, submit: "Сохранить" });
+      });
+  }
+
+  function handleAvatarUpdate({ avatar }) {
+    setValue({ ...value, submit: "Сохраняю данные..." });
+    api
+      .editUserAvatar(avatar)
+      .then(() => setCurrentUser({ ...currentUser, avatar: avatar }))
       .catch((err) => console.log(err))
       .then(() => {
         closeAllPopups();
@@ -100,10 +148,13 @@ function App() {
           <div className="page__container">
             <Header />
             <Main
+              cards={cardList}
               onEditProfile={handleEditProfileClick}
               onAddPlace={handleAddPlaceClick}
               onEditAvatar={handleEditAvatarClick}
               onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
             />
             <Footer />
 
@@ -159,7 +210,12 @@ function App() {
                 className="popup__save-btn"
               />
             </PopupWithForm>
-            
+            <EditAvatarPopup
+              isOpen={isEditAvatarPopupOpen}
+              onClose={closeAllPopups}
+              value={value.submit}
+              onUpdateAvatar={handleAvatarUpdate}
+            />
             <ImagePopup card={selectedCard} onClose={closeAllPopups} />
           </div>
         </div>
