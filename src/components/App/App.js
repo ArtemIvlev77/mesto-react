@@ -4,12 +4,11 @@ import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import ImagePopup from "../ImagePopup/ImagePopup";
 import Main from "../Main/Main";
-import PopupWithForm from "../PopupWithForm/PopupWithForm.js";
 import api from "../../utils/api";
 import EditProfilePopup from "../EditProfilePopup/EditProfilePopup";
 import EditAvatarPopup from "../EditAvatarPopup/EditAvatarPopup";
 import Card from "../Card/Card";
-import AddNewElementPopup from "../AddNewElementPopup/AddNewElementPopup";
+import AddPlacePopup from "../AddPlacePopup/AddPlacePopup";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
@@ -27,7 +26,7 @@ function App() {
 
   const [cards, setCards] = useState([]);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-  const [isAddNewElementPopupOpen, setAddNewElementPopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(false);
   const [value, setValue] = useState({
@@ -44,11 +43,11 @@ function App() {
   }
 
   function handleAddPlaceClick() {
-    setAddNewElementPopupOpen(true);
+    setAddPlacePopupOpen(true);
   }
 
   function closeAllPopups() {
-    setAddNewElementPopupOpen(false);
+    setAddPlacePopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setSelectedCard(false);
@@ -70,9 +69,14 @@ function App() {
 
   const handleCardDelete = (card) => {
     const isOwn = card.owner._id === currentUser._id;
-    api.deleteCard(isOwn).then((newCards) => {
-      setCards((state) => state.filter((c) => c._id !== newCards._id));
-    });
+    api
+      .deleteCard(card._id, isOwn)
+      .then(() => {
+        setCards((cards) => cards.filter((c) => c._id !== card._id));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -86,10 +90,10 @@ function App() {
       });
   }, []);
 
-  function handleAddNewElementSubmit({ name, link }) {
+  function handleAddPlaceSubmit({ name, link }) {
     setValue({ ...value, submit: "Сохраняю данные..." });
     api
-      .addNewElement(name, link)
+      .addPlace(name, link)
       .then((newCard) => setCards([newCard, ...cards]))
       .catch((err) => console.log(err))
       .then(() => {
@@ -167,7 +171,6 @@ function App() {
               onEditAvatar={handleEditAvatarClick}
               onCardClick={handleCardClick}
               onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}
             />
             <Footer />
 
@@ -178,12 +181,21 @@ function App() {
               onUpdateUser={handleUpdateUser}
             />
 
-            <AddNewElementPopup
+            <AddPlacePopup
               onClose={closeAllPopups}
-              isOpen={isAddNewElementPopupOpen}
-              onAddNewElement={handleAddNewElementSubmit}
+              isOpen={isAddPlacePopupOpen}
+              onAddPlacePopup={handleAddPlaceSubmit}
             />
-            <PopupWithForm
+
+            <EditAvatarPopup
+              isOpen={isEditAvatarPopupOpen}
+              onClose={closeAllPopups}
+              value={value.submit}
+              onUpdateAvatar={handleAvatarUpdate}
+            />
+            <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+
+            {/* <PopupWithForm
               type="popupSubmit"
               title="Вы уверены?"
               onClose={closeAllPopups}
@@ -194,14 +206,7 @@ function App() {
                 value="Да"
                 className="popup__save-btn"
               />
-            </PopupWithForm>
-            <EditAvatarPopup
-              isOpen={isEditAvatarPopupOpen}
-              onClose={closeAllPopups}
-              value={value.submit}
-              onUpdateAvatar={handleAvatarUpdate}
-            />
-            <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+            </PopupWithForm> */}
           </div>
         </div>
       </div>

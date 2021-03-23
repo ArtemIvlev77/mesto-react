@@ -40,7 +40,7 @@ class Api {
     }).then((res) => this._addResult(res));
   }
 
-  addNewElement(name, link) {
+  addPlace(name, link) {
     return fetch(`${this._url}/cards`, {
       method: "POST",
       headers: this._headers,
@@ -65,11 +65,12 @@ class Api {
     }
   }
 
-  deleteCard(cardId) {
-    return fetch(`${this._url}/cards/${cardId}`, {
-      method: "DELETE",
-      headers: this._headers,
-    }).then((res) => this._addResult(res));
+  deleteCard(cardId, isOwn) {
+    if (isOwn)
+      return fetch(`${this._url}/cards/${cardId}`, {
+        method: "DELETE",
+        headers: this._headers,
+      }).then((res) => this._addResult(res));
   }
 
   _addResult(res) {

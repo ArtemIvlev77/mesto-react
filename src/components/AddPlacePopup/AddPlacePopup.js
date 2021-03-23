@@ -1,7 +1,7 @@
 import PopupWithForm from "../PopupWithForm/PopupWithForm.js";
 import { useState } from "react";
 
-function AddNewElementPopup(props) {
+function AddPlacePopup(props) {
   const [name, setName] = useState();
   const [link, setLink] = useState();
 
@@ -14,7 +14,7 @@ function AddNewElementPopup(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    props.onAddNewElement({ name, link });
+    props.onAddPlacePopup({ name, link });
   }
   return (
     <PopupWithForm
@@ -50,4 +50,4 @@ function AddNewElementPopup(props) {
   );
 }
 
-export default AddNewElementPopup;
+export default AddPlacePopup;
