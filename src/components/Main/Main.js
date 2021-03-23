@@ -24,7 +24,7 @@ const Main = (props) => {
     api.toggleLikeCardStatus(card._id, !isLiked).then((newCard) => {
       setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
     });
-  };
+  };  
 
   const handleCardDelete = (card) => {
     const isOwn = props.card.owner._id === currentUser._id;

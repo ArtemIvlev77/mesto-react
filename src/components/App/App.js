@@ -6,9 +6,9 @@ import ImagePopup from "../ImagePopup/ImagePopup.js";
 import Main from "../Main/Main.js";
 import PopupWithForm from "../PopupWithForm/PopupWithForm.js";
 import api from "../../utils/api.js";
+import EditProfilePopup from "../EditProfilePopup/EditProfilePopup";
 
 function App() {
-
   const [currentUser, setCurrentUser] = useState({});
 
   useEffect(() => {
@@ -26,6 +26,10 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(false);
+  const [value, setValue] = useState({
+    submit: "Сохранить",
+    confirm: "Да",
+  });
 
   function handleCardClick(card) {
     setSelectedCard({
@@ -41,6 +45,30 @@ function App() {
     setSelectedCard(false);
   }
 
+  //todo
+
+  useEffect(() => {
+    const handleCloseOnEsc = (event) => {
+      if (event.key === "Escape") {
+        closeAllPopups();
+      }
+    };
+    const handleCloseOnOverlay = (event) => {
+      const popupIsOpened = document.querySelector(".popup_is-opened");
+      if (event.target === popupIsOpened) {
+        closeAllPopups();
+      }
+    };
+
+    document.addEventListener("keydown", handleCloseOnEsc);
+    document.addEventListener("mousedown", handleCloseOnOverlay);
+
+    return () => {
+      document.removeEventListener("keydown", handleCloseOnEsc);
+      document.removeEventListener("mousedown", handleCloseOnOverlay);
+    };
+  }, []);
+
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
   }
@@ -51,6 +79,18 @@ function App() {
 
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(true);
+  }
+
+  function handleUpdateUser({ name, about }) {
+    setValue({ ...value, submit: "Сохраняю данные..." });
+    api
+      .editUserInfo(name, about)
+      .then(() => setCurrentUser({ ...currentUser, name: name, about: about }))
+      .catch((err) => console.log(err))
+      .then(() => {
+        closeAllPopups();
+        setValue({ ...value, submit: "Сохранить" });
+      });
   }
 
   return (
@@ -66,39 +106,13 @@ function App() {
               onCardClick={handleCardClick}
             />
             <Footer />
-            <PopupWithForm
-              type="profileEditor"
-              title="Редактировать профиль"
+
+            <EditProfilePopup
               isOpen={isEditProfilePopupOpen}
               onClose={closeAllPopups}
-            >
-              <input
-                name="name"
-                id="profile-name"
-                type="text"
-                className="popup__text popup__text_valid popup__name-input"
-                required
-                minLength="2"
-                maxLength="40"
-              />
-              <span id="profile-name-error" className="popup__error" />
-              <input
-                name="job"
-                id="profile-job"
-                type="text"
-                className="popup__text popup__text_valid popup__job-input"
-                required
-                minLength="2"
-                maxLength="200"
-              />
-              <span id="profile-job-error" className="popup__error" />
-              <button
-                type="submit"
-                className="popup__save-btn profileEditor-saveBtn"
-              >
-                Сохранить
-              </button>
-            </PopupWithForm>
+              value={value.submit}
+              onUpdateUser={handleUpdateUser}
+            />
 
             <PopupWithForm
               type="newElement"
@@ -145,28 +159,7 @@ function App() {
                 className="popup__save-btn"
               />
             </PopupWithForm>
-            <PopupWithForm
-              type="popupEditAvatar"
-              title="Обновить аватар"
-              isOpen={isEditAvatarPopupOpen}
-              onClose={closeAllPopups}
-            >
-              <input
-                name="avatar"
-                id="URL"
-                type="url"
-                className="popup__text popup__text_valid popupAvatarUrl"
-                placeholder="Ссылка на аватар"
-                required
-              />
-              <span id="URL-error" className="popup__error" />
-              <button
-                type="submit"
-                className="popup__save-btn editAvatar-saveBtn"
-              >
-                Сохранить
-              </button>
-            </PopupWithForm>
+            
             <ImagePopup card={selectedCard} onClose={closeAllPopups} />
           </div>
         </div>
