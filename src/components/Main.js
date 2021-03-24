@@ -1,9 +1,20 @@
 import avatarSwitch from "../image/pencil.svg";
+import Card from "./Card";
 import { useContext } from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 const Main = (props) => {
   const currentUser = useContext(CurrentUserContext);
+
+  const cardList = props.card.map((cards) => (
+    <Card
+      key={cards._id}
+      card={cards}
+      onCardClick={props.onCardClick}
+      onCardLike={props.onCardLike}
+      onCardDelete={props.onCardDelete}
+    />
+  ));
 
   return (
     <main className="content">
@@ -39,7 +50,7 @@ const Main = (props) => {
         />
       </section>
       <section className="page__section">
-        <ul className="elements">{props.cardList}</ul>
+        <ul className="elements">{cardList}</ul>
       </section>
     </main>
   );

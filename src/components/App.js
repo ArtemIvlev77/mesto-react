@@ -102,16 +102,6 @@ function App() {
       });
   }
 
-  const cardList = cards.map((cards) => (
-    <Card
-      key={cards._id}
-      card={cards}
-      onCardClick={handleCardClick}
-      onCardLike={handleCardLike}
-      onCardDelete={handleCardDelete}
-    />
-  ));
-
   function handleUpdateUser({ name, about }) {
     setValue({ ...value, submit: "Сохраняю данные..." });
     api
@@ -165,7 +155,10 @@ function App() {
           <div className="page__container">
             <Header />
             <Main
-              cardList={cardList}
+              card={cards}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
               onEditProfile={handleEditProfileClick}
               onAddPlace={handleAddPlaceClick}
               onEditAvatar={handleEditAvatarClick}

@@ -38,7 +38,7 @@ function Card(props) {
           <div className="element__like-count">{props.card.likes.length}</div>
         </div>
       </div>
-    </li>
+    </li> 
   );
 }
 
