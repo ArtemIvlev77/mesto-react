@@ -171,6 +171,7 @@ function App() {
               onEditAvatar={handleEditAvatarClick}
               onCardClick={handleCardClick}
               onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
             />
             <Footer />
 
