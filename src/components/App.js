@@ -165,13 +165,10 @@ function App() {
           <div className="page__container">
             <Header />
             <Main
-              cards={cardList}
+              cardList={cardList}
               onEditProfile={handleEditProfileClick}
               onAddPlace={handleAddPlaceClick}
               onEditAvatar={handleEditAvatarClick}
-              onCardClick={handleCardClick}
-              onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}
             />
             <Footer />
 
