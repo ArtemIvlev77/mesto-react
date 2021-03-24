@@ -1,6 +1,6 @@
-import avatarSwitch from "../../image/pencil.svg";
+import avatarSwitch from "../image/pencil.svg";
 import { useContext } from "react";
-import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 const Main = (props) => {
   const currentUser = useContext(CurrentUserContext);

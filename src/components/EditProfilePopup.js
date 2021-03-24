@@ -1,5 +1,5 @@
-import PopupWithForm from "../PopupWithForm/PopupWithForm.js";
-import { CurrentUserContext } from "../../contexts/CurrentUserContext.js";
+import PopupWithForm from "./PopupWithForm.js";
+import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import { useContext, useState, useEffect } from "react";
 
 function EditProfilePopup(props) {

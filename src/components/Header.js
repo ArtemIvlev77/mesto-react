@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../../image/logo.svg";
+import logo from "../image/logo.svg";
 
 function Header() {
   return (

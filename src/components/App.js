@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
-import { CurrentUserContext } from "../../contexts/CurrentUserContext";
-import Footer from "../Footer/Footer";
-import Header from "../Header/Header";
-import ImagePopup from "../ImagePopup/ImagePopup";
-import Main from "../Main/Main";
-import api from "../../utils/api";
-import EditProfilePopup from "../EditProfilePopup/EditProfilePopup";
-import EditAvatarPopup from "../EditAvatarPopup/EditAvatarPopup";
-import Card from "../Card/Card";
-import AddPlacePopup from "../AddPlacePopup/AddPlacePopup";
-import ConfirmPopup from "../ConfirmPopup/ConfirmPopup";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import Footer from "./Footer";
+import Header from "./Header";
+import ImagePopup from "./ImagePopup";
+import Main from "./Main";
+import api from "../utils/api";
+import EditProfilePopup from "./EditProfilePopup";
+import EditAvatarPopup from "./EditAvatarPopup";
+import Card from "./Card";
+import AddPlacePopup from "./AddPlacePopup";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
@@ -29,11 +28,9 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(false);
   const [value, setValue] = useState({
     submit: "Сохранить",
-    confirm: "Да",
   });
 
   function handleEditAvatarClick() {
@@ -52,7 +49,6 @@ function App() {
     setAddPlacePopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
-    setIsConfirmPopupOpen(false);
     setSelectedCard(false);
   }
 
@@ -75,7 +71,8 @@ function App() {
     api
       .deleteCard(card._id, isOwn)
       .then(() => {
-        setCards((cards) => cards.filter((c) => c._id !== card._id));
+        const newCard = cards.filter((c) => c._id !== card._id);
+        setCards(newCard);
       })
       .catch((err) => {
         console.log(err);
@@ -197,12 +194,6 @@ function App() {
               onUpdateAvatar={handleAvatarUpdate}
             />
             <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-
-            <ConfirmPopup
-              isOpen={isConfirmPopupOpen}
-              onClose={closeAllPopups}
-              value={value.confirm}
-            />
           </div>
         </div>
       </div>

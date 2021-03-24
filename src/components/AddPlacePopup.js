@@ -1,4 +1,4 @@
-import PopupWithForm from "../PopupWithForm/PopupWithForm.js";
+import PopupWithForm from "./PopupWithForm.js";
 import { useState } from "react";
 
 function AddPlacePopup(props) {
