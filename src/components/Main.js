@@ -39,7 +39,7 @@ const Main = (props) => {
         />
       </section>
       <section className="page__section">
-        <ul className="elements">{currentUser.cardList}</ul>
+        <ul className="elements">{props.cardList}</ul>
       </section>
     </main>
   );
