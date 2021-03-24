@@ -9,6 +9,7 @@ import EditProfilePopup from "../EditProfilePopup/EditProfilePopup";
 import EditAvatarPopup from "../EditAvatarPopup/EditAvatarPopup";
 import Card from "../Card/Card";
 import AddPlacePopup from "../AddPlacePopup/AddPlacePopup";
+import ConfirmPopup from "../ConfirmPopup/ConfirmPopup";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
@@ -28,6 +29,7 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(false);
   const [value, setValue] = useState({
     submit: "Сохранить",
@@ -50,6 +52,7 @@ function App() {
     setAddPlacePopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
+    setIsConfirmPopupOpen(false);
     setSelectedCard(false);
   }
 
@@ -195,18 +198,11 @@ function App() {
             />
             <ImagePopup card={selectedCard} onClose={closeAllPopups} />
 
-            {/* <PopupWithForm
-              type="popupSubmit"
-              title="Вы уверены?"
+            <ConfirmPopup
+              isOpen={isConfirmPopupOpen}
               onClose={closeAllPopups}
-            >
-              <input
-                name="save-button"
-                type="submit"
-                value="Да"
-                className="popup__save-btn"
-              />
-            </PopupWithForm> */}
+              value={value.confirm}
+            />
           </div>
         </div>
       </div>
