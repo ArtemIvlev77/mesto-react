@@ -7,7 +7,6 @@ import Main from "./Main";
 import api from "../utils/api";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
-import Card from "./Card";
 import AddPlacePopup from "./AddPlacePopup";
 
 function App() {
@@ -140,11 +139,11 @@ function App() {
     };
 
     document.addEventListener("keydown", handleCloseOnEsc);
-    document.addEventListener("mousedown", handleCloseOnOverlay);
+    document.addEventListener("click", handleCloseOnOverlay);
 
     return () => {
       document.removeEventListener("keydown", handleCloseOnEsc);
-      document.removeEventListener("mousedown", handleCloseOnOverlay);
+      document.removeEventListener("click", handleCloseOnOverlay);
     };
   }, []);
 

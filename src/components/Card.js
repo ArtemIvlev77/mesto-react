@@ -30,15 +30,15 @@ function Card(props) {
         alt={props.card.name}
         onClick={handleClick}
       />
-      <button className={cardRemoveBtnClassName} onClick={handleCardDelete} />
       <div className="element__description">
         <h3 className="element__title">{props.card.name}</h3>
+        <button className={cardRemoveBtnClassName} onClick={handleCardDelete} />
         <div className="element__like-container">
           <button className={cardLikeBtnClassName} onClick={handleLikeClick} />
           <div className="element__like-count">{props.card.likes.length}</div>
         </div>
       </div>
-    </li> 
+    </li>
   );
 }
 

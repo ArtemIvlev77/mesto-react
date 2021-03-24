@@ -7,11 +7,12 @@ function ImagePopup(props) {
         props.card ? "popup_is-opened" : ""
       }`}
     >
-      <div
-        className="popup__container popup__image-preview-container"
-        onClick={props.onClose}
-      >
-        <button type="button" className="popup__closeBtn" />
+      <div className="popup__container popup__image-preview-container">
+        <button
+          type="button"
+          className="popup__closeBtn"
+          onClick={props.onClose}
+        />
         <img
           src={props.card.link}
           alt={props.card.name}
@@ -25,4 +26,3 @@ function ImagePopup(props) {
   );
 }
 export default ImagePopup;
-  
