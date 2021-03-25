@@ -60,9 +60,16 @@ function App() {
 
   const handleCardLike = (card) => {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
-    api.toggleLikeCardStatus(card._id, !isLiked).then((newCard) => {
-      setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
-    });
+    api
+      .toggleLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
+        setCards((state) =>
+          state.map((c) => (c._id === card._id ? newCard : c))
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleCardDelete = (card) => {
@@ -94,10 +101,12 @@ function App() {
     api
       .addPlace(name, link)
       .then((newCard) => setCards([newCard, ...cards]))
-      .catch((err) => console.log(err))
       .then(() => {
         closeAllPopups();
         setValue({ ...value, submit: "Сохранить" });
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 
@@ -106,10 +115,12 @@ function App() {
     api
       .editUserInfo(name, about)
       .then(() => setCurrentUser({ ...currentUser, name: name, about: about }))
-      .catch((err) => console.log(err))
       .then(() => {
         closeAllPopups();
         setValue({ ...value, submit: "Сохранить" });
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 
@@ -122,6 +133,9 @@ function App() {
       .then(() => {
         closeAllPopups();
         setValue({ ...value, submit: "Сохранить" });
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 
@@ -132,8 +146,7 @@ function App() {
       }
     };
     const handleCloseOnOverlay = (event) => {
-      const popupIsOpened = document.querySelector(".popup_is-opened");
-      if (event.target === popupIsOpened) {
+      if (event.target.classList.contains("popup_is-opened")) {
         closeAllPopups();
       }
     };
